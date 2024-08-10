@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\City;
+use App\Models\PaymentMethod;
 use App\Models\Province;
 use App\Models\SportActivity;
 use App\Models\SportActivityParticipant;
@@ -98,6 +99,34 @@ class DatabaseSeeder extends Seeder
         SportActivityParticipant::create([
             'sport_activity_id' => 1,
             'user_id' => 2,
+        ]);
+
+        PaymentMethod::create([
+            'name' => 'BCA',
+            'virtual_account_number' => '1234-5678-0001234567',
+            'virtual_account_name' => 'dibimbing',
+            'image_url' => 'https://dibimbing-cdn.sgp1.cdn.digitaloceanspaces.com/bca-logo.svg'
+        ]);
+
+        PaymentMethod::create([
+            'name' => 'Bank BRI',
+            'virtual_account_number' => '9101-1121-0023456789',
+            'virtual_account_name' => 'dibimbing',
+            'image_url' => 'https://dibimbing-cdn.sgp1.cdn.digitaloceanspaces.com/bri-logo.svg'
+        ]);
+
+        PaymentMethod::create([
+            'name' => 'Bank Mandiri',
+            'virtual_account_number' => '2718-1223-0045678901',
+            'virtual_account_name' => 'dibimbing',
+            'image_url' => 'https://dibimbing-cdn.sgp1.cdn.digitaloceanspaces.com/mandiri-logo.svg'
+        ]);
+
+        PaymentMethod::create([
+            'name' => 'Bank BNI',
+            'virtual_account_number' => '5678-1234-0012345678',
+            'virtual_account_name' => 'dibimbing',
+            'image_url' => 'https://dibimbing-cdn.sgp1.cdn.digitaloceanspaces.com/bni-logo.svg'
         ]);
     }
 }

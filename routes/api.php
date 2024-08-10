@@ -45,3 +45,9 @@ Route::group([
     Route::post('/update/{sportActivityId}', 'App\Http\Controllers\API\SportActivityController@updateSportActivity')->middleware(['auth:sanctum', IsAdmin::class]);
     Route::delete('/delete/{sportActivityId}', 'App\Http\Controllers\API\SportActivityController@deleteSportActivity')->middleware(['auth:sanctum', IsAdmin::class]);
 });
+
+Route::group([
+    'prefix' => 'v1/payment-methods'
+], function () {
+    Route::get('/', 'App\Http\Controllers\API\PaymentMethodController@getPaymentMethods');
+});
