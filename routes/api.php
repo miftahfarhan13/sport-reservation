@@ -19,6 +19,11 @@ Route::delete('v1/user/delete/{id}', 'App\Http\Controllers\API\RegisterControlle
 Route::post('v1/upload-image', 'App\Http\Controllers\API\FileController@storeImage');
 Route::post('v1/upload-file', 'App\Http\Controllers\API\FileController@storeFile');
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::group([
+    'prefix' => 'v1/sport-categories'
+], function () {
+    Route::get('/', 'App\Http\Controllers\API\SportCategoryController@getCategories')->middleware('auth:sanctum');
+    Route::post('/create', 'App\Http\Controllers\API\SportCategoryController@createCategory')->middleware('auth:sanctum');
+    Route::post('/update/{categoryId}', 'App\Http\Controllers\API\SportCategoryController@updateCategory')->middleware('auth:sanctum');
+    Route::delete('/delete/{categoryId}', 'App\Http\Controllers\API\SportCategoryController@deleteCategory')->middleware('auth:sanctum');
+});

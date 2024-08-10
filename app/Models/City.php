@@ -2,25 +2,45 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    use HasFactory;
-    
-     /**
-     * The table associated with the model.
+    /**
+     * Indicates if the model should be timestamped.
      *
-     * @var string
+     * @var bool
      */
-    protected $table = 'cities';
-
+    public $timestamps = false;
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'city_id' => 'integer',
+        'province_id' => 'integer',
+        'city_lat' => 'float',
+        'city_lon' => 'float',
+    ];
 
     /**
-     * The primary key associated with the table.
+     * Indicates if the model primary key.
      *
-     * @var string
+     * @var bool
      */
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'city_id';
+
+    public function __construct()
+    {
+        $this->table = config('laraciproid.city');
+    }
+
+    public function province()
+    {
+        return $this->belongsTo(
+            'App\Models\Province',
+            'province_id'
+        );
+    }
 }

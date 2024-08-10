@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\City;
+use App\Models\Province;
 use App\Models\SportCategory;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -49,5 +52,30 @@ class DatabaseSeeder extends Seeder
         SportCategory::create(['name'=>'Pilates']);
         SportCategory::create(['name'=>'Poundfit']);
         SportCategory::create(['name'=>'Yoga']);
+
+        Province::truncate();
+        City::truncate();
+
+        $jsonProvinces = File::get(database_path('json/provinces.json'));
+        $dataProvinces = json_decode($jsonProvinces);
+        $dataProvinces = collect($dataProvinces);
+
+        foreach ($dataProvinces as $d) {
+            $d = collect($d)->toArray();
+            $p = new Province();
+            $p->fill($d);
+            $p->save();
+        }
+
+        $jsonCities = File::get(database_path('json/cities.json'));
+        $dataCities = json_decode($jsonCities);
+        $dataCities = collect($dataCities);
+
+        foreach ($dataCities as $d) {
+            $d = collect($d)->toArray();
+            $p = new City();
+            $p->fill($d);
+            $p->save();
+        }
     }
 }

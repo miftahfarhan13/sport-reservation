@@ -2,25 +2,46 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Province extends Model
 {
-    use HasFactory;
-    
-     /**
-     * The table associated with the model.
+    /**
+     * Indicates if the model should be timestamped.
      *
-     * @var string
+     * @var bool
      */
-    protected $table = 'provinces';
-
+    public $timestamps = false;
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'province_id' => 'integer',
+        'province_lat' => 'float',
+        'province_lon' => 'float',
+        'province_capital_city_id' => 'integer',
+        'timezone' => 'integer',
+    ];
 
     /**
-     * The primary key associated with the table.
+     * Indicates if the model primary key.
      *
-     * @var string
+     * @var bool
      */
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'province_id';
+
+    public function __construct()
+    {
+        $this->table = config('laraciproid.province');
+    }
+
+    public function cities()
+    {
+        return $this->hasMany(
+            'App\Models\City',
+            'province_id'
+        );
+    }
 }
