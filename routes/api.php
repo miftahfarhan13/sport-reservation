@@ -27,3 +27,11 @@ Route::group([
     Route::post('/update/{categoryId}', 'App\Http\Controllers\API\SportCategoryController@updateCategory')->middleware('auth:sanctum');
     Route::delete('/delete/{categoryId}', 'App\Http\Controllers\API\SportCategoryController@deleteCategory')->middleware('auth:sanctum');
 });
+
+Route::group([
+    'prefix' => 'v1/location'
+], function () {
+    Route::get('/provinces', 'App\Http\Controllers\API\LocationController@getProvinces')->middleware('auth:sanctum');
+    Route::get('/cities/{provinceId}', 'App\Http\Controllers\API\LocationController@getCitiesByProvinceId')->middleware('auth:sanctum');
+    Route::get('/cities', 'App\Http\Controllers\API\LocationController@getCities')->middleware('auth:sanctum');
+});
