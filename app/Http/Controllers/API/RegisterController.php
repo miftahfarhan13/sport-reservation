@@ -157,7 +157,7 @@ class RegisterController extends BaseController
 
             $user->delete();
             //return successful response
-            return response()->json(['error' => false, 'message' => 'data deleted'], 200);
+            return response()->json(['error' => false, 'message' => 'Data deleted successfully'], 200);
         } catch (\Exception $e) {
             //return error message
             return response()->json(['error' => true, 'message' => $e->getMessage()], 406);

@@ -4,9 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\City;
 use App\Models\Province;
+use App\Models\SportActivity;
+use App\Models\SportActivityParticipant;
 use App\Models\SportCategory;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -77,5 +78,26 @@ class DatabaseSeeder extends Seeder
             $p->fill($d);
             $p->save();
         }
+
+        SportActivity::create([
+            'sport_category_id' => 4,
+            'city_id' => 3171,
+            'user_id' => 1,
+            'title' => 'Happytepokbulu! @vinduss',
+            'description' => '<p><strong>BARENG HAPPYTEBOX YUK!</strong><br>2024!</p><ul><li>Male & Female very welcome</li><li>All Level Beginner - Intermediate</li><li>3 lap, sudah ada member diluar rovo</li><li>Sistem rally 25 point</li><li>Include shuttlecock (kita pakai NINE/setara)</li></ul><p><strong>Fee:</strong> 60.000</p><p>PM buat join Grup kita biar rutin 😉</p><p>Thank you 🙏</p>',
+            'price' => 60000,
+            'price_discount' => 70000,
+            'slot' => 30,
+            'address' => 'Jl Pioner No. 50a, Penjaringan, Kec. Penjaringan, Jakarta 14440',
+            'map_url' => 'https://maps.app.goo.gl/vmByccAmBx7xQXNL9',
+            'activity_date' => '2024-08-11',
+            'start_time' => '09:00',
+            'end_time' => '12:00',
+        ]);
+
+        SportActivityParticipant::create([
+            'sport_activity_id' => 1,
+            'user_id' => 2,
+        ]);
     }
 }
