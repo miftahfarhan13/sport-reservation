@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('user_id')->references('id')->on('users');
             $table->text('title');
             $table->text('description');
+            $table->text('image_url')->nullable();
             $table->integer('price');
             $table->integer('price_discount')->nullable();
             $table->integer('slot');

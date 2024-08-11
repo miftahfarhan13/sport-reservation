@@ -12,7 +12,7 @@ Route::controller(RegisterController::class)->group(function () {
 Route::get('v1/me', 'App\Http\Controllers\API\RegisterController@me')->middleware('auth:sanctum');
 Route::get('v1/users', 'App\Http\Controllers\API\RegisterController@getUsers')->middleware('auth:sanctum');
 Route::post('v1/update-user/{userId}', 'App\Http\Controllers\API\RegisterController@updateUser')->middleware('auth:sanctum');
-Route::post('v1/register', 'App\Http\Controllers\API\RegisterController@register')->middleware('auth:sanctum');
+Route::post('v1/register', 'App\Http\Controllers\API\RegisterController@register');
 Route::get('v1/me', 'App\Http\Controllers\API\RegisterController@me')->middleware('auth:sanctum');
 Route::post('v1/logout', 'App\Http\Controllers\API\RegisterController@logout')->middleware('auth:sanctum');
 // Route::delete('v1/user/delete/{id}', 'App\Http\Controllers\API\RegisterController@deleteUser')->middleware('auth:sanctum');
@@ -50,4 +50,16 @@ Route::group([
     'prefix' => 'v1/payment-methods'
 ], function () {
     Route::get('/', 'App\Http\Controllers\API\PaymentMethodController@getPaymentMethods');
+});
+
+Route::get('/v1/my-transaction', 'App\Http\Controllers\API\TransactionController@getMyTransaction')->middleware('auth:sanctum');
+Route::get('/v1/all-transaction', 'App\Http\Controllers\API\TransactionController@getAllTransaction')->middleware('auth:sanctum');
+Route::group([
+    'prefix' => 'v1/transaction'
+], function () {
+    Route::get('/{transactionId}', 'App\Http\Controllers\API\TransactionController@getTransactionById')->middleware('auth:sanctum');
+    Route::post('/create', 'App\Http\Controllers\API\TransactionController@createTransaction')->middleware('auth:sanctum');
+    Route::post('/update-proof-payment/{transactionId}', 'App\Http\Controllers\API\TransactionController@updateTransactionProofPayment')->middleware('auth:sanctum');
+    Route::post('/update-status/{transactionId}', 'App\Http\Controllers\API\TransactionController@updateTransactionStatus')->middleware('auth:sanctum');
+    Route::post('/cancel/{transactionId}', 'App\Http\Controllers\API\TransactionController@cancelTransaction')->middleware('auth:sanctum');
 });

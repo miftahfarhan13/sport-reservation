@@ -86,6 +86,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => 1,
             'title' => 'Happytepokbulu! @vinduss',
             'description' => '<p><strong>BARENG HAPPYTEBOX YUK!</strong><br>2024!</p><ul><li>Male & Female very welcome</li><li>All Level Beginner - Intermediate</li><li>3 lap, sudah ada member diluar rovo</li><li>Sistem rally 25 point</li><li>Include shuttlecock (kita pakai NINE/setara)</li></ul><p><strong>Fee:</strong> 60.000</p><p>PM buat join Grup kita biar rutin 😉</p><p>Thank you 🙏</p>',
+            'image_url' => 'https://dibimbing-cdn.sgp1.cdn.digitaloceanspaces.com/badminton-tournament-flyer-design-template-ff5b113106d5d5d63e07279270623b70_screen.jpg',
             'price' => 60000,
             'price_discount' => 70000,
             'slot' => 30,
@@ -99,6 +100,7 @@ class DatabaseSeeder extends Seeder
         SportActivityParticipant::create([
             'sport_activity_id' => 1,
             'user_id' => 2,
+            'status' => 'success'
         ]);
 
         PaymentMethod::create([
