@@ -1,0 +1,38 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: robert
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: app_image
+    container_name: app_container
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - app_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 4030:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+# docker-compose exec app rm -rf vendor composer.lock
+# docker-compose exec app composer install
+# docker-compose exec app php artisan key:generate
+# docker-compose exec app php artisan migrate
