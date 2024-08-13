@@ -100,7 +100,6 @@ class DatabaseSeeder extends Seeder
         SportActivityParticipant::create([
             'sport_activity_id' => 1,
             'user_id' => 2,
-            'status' => 'success'
         ]);
 
         PaymentMethod::create([
