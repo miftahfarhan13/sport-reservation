@@ -23,7 +23,7 @@ class FileController extends Controller
 
         $request->file->move(public_path('uploads/images'), $fileName);
 
-        $currUrl = url('');
+        $currUrl = config('app.url');
 
         /*  
             Write Code Here for
@@ -47,7 +47,7 @@ class FileController extends Controller
 
         $request->file->move(public_path('uploads/files'), $fileName);
 
-        $currUrl = url('');
+        $currUrl = config('app.url');
 
         /*  
             Write Code Here for
