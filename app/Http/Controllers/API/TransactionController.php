@@ -36,7 +36,7 @@ class TransactionController extends Controller
 
             if (!empty($search)) {
                 $query->whereHas('transaction_items', function ($q) use ($search) {
-                    $q->where('title', 'like', '%' . $search . '%');
+                    $q->whereRaw('LOWER(title) LIKE ?', ['%' . strtolower($search) . '%']);
                 });
             }
 
@@ -65,7 +65,7 @@ class TransactionController extends Controller
 
             if (!empty($search)) {
                 $query->whereHas('transaction_items', function ($q) use ($search) {
-                    $q->where('title', 'like', '%' . $search . '%');
+                    $q->whereRaw('LOWER(title) LIKE ?', ['%' . strtolower($search) . '%']);
                 });
             }
 
