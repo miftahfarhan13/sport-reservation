@@ -35,7 +35,9 @@ class TransactionController extends Controller
             ])->where('user_id', $user->id);
 
             if (!empty($search)) {
-                $query->where('title', 'like', '%' . $search . '%');
+                $query->whereHas('transaction_items', function ($q) use ($search) {
+                    $q->where('title', 'like', '%' . $search . '%');
+                });
             }
 
             if ($isPaginate) {
@@ -62,7 +64,9 @@ class TransactionController extends Controller
             ]);
 
             if (!empty($search)) {
-                $query->where('title', 'like', '%' . $search . '%');
+                $query->whereHas('transaction_items', function ($q) use ($search) {
+                    $q->where('title', 'like', '%' . $search . '%');
+                });
             }
 
             if ($isPaginate) {
@@ -70,10 +74,11 @@ class TransactionController extends Controller
             } else {
                 $activities = $query->get();
             }
-            //return successful response
+
+            // Return successful response
             return response()->json(['error' => false, 'result' => $activities], 200);
         } catch (\Exception $e) {
-            //return error message
+            // Return error message
             return response()->json(['error' => true, 'message' => $e->getMessage()], 406);
         }
     }
