@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('payment_method_id')->constrained('payment_methods');
             $table->string('invoice_id');
+            $table->string('username');
             $table->string('status');
             $table->integer('total_amount');
             $table->text('proof_payment_url')->nullable();

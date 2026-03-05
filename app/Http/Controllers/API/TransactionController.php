@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+
 class TransactionController extends Controller
 {
     function generateInvoiceId()
@@ -86,7 +87,7 @@ class TransactionController extends Controller
     public function getTransactionById($transactionId, Request $request)
     {
         try {
-            $query = Transaction::with(['transaction_items',])
+            $query = Transaction::with(['transaction_items', 'user'])
                 ->where('id', $transactionId)
                 ->first();
 
@@ -128,6 +129,8 @@ class TransactionController extends Controller
             $transaction->total_amount = $sport_activity->price;
             $transaction->order_date = $order_date;
             $transaction->expired_date = $expired_date;
+            //tambahin username di response transaction
+            $transaction->username = $user->name;
             $transaction->save();
 
             $items = new TransactionItem();

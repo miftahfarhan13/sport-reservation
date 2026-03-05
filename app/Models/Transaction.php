@@ -15,6 +15,15 @@ class Transaction extends Model
      */
     protected $table = 'transactions';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'username'
+    ];
+
 
     /**
      * The primary key associated with the table.
