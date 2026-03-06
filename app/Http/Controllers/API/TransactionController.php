@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+
 class TransactionController extends Controller
 {
     function generateInvoiceId()
@@ -32,6 +33,7 @@ class TransactionController extends Controller
 
             $query = Transaction::with([
                 'transaction_items',
+                'user',
             ])->where('user_id', $user->id);
 
             if (!empty($search)) {
@@ -45,6 +47,16 @@ class TransactionController extends Controller
             } else {
                 $activities = $query->get();
             }
+
+            // fallback username: if null/empty, take from related user name
+            $activities->getCollection()->transform(function ($t) {
+                if (empty($t->username)) {
+                    $t->username = optional($t->user)->name;
+                }
+                unset($t->user);
+                return $t;
+            });
+
             //return successful response
             return response()->json(['error' => false, 'result' => $activities], 200);
         } catch (\Exception $e) {
@@ -61,6 +73,7 @@ class TransactionController extends Controller
 
             $query = Transaction::with([
                 'transaction_items',
+                'user',
             ]);
 
             if (!empty($search)) {
@@ -75,6 +88,24 @@ class TransactionController extends Controller
                 $activities = $query->get();
             }
 
+            if (method_exists($activities, 'getCollection')) {
+                $activities->getCollection()->transform(function ($t) {
+                    if (empty($t->username)) {
+                        $t->username = optional($t->user)->name;
+                    }
+                    unset($t->user);
+                    return $t;
+                });
+            } else {
+                $activities->transform(function ($t) {
+                    if (empty($t->username)) {
+                        $t->username = optional($t->user)->name;
+                    }
+                    unset($t->user);
+                    return $t;
+                });
+            }
+
             // Return successful response
             return response()->json(['error' => false, 'result' => $activities], 200);
         } catch (\Exception $e) {
@@ -86,9 +117,16 @@ class TransactionController extends Controller
     public function getTransactionById($transactionId, Request $request)
     {
         try {
-            $query = Transaction::with(['transaction_items',])
+            $query = Transaction::with(['transaction_items', 'user'])
                 ->where('id', $transactionId)
                 ->first();
+
+            if ($query && empty($query->username)) {
+                $query->username = optional($query->user)->name;
+            }
+            if ($query) {
+                $query->unsetRelation('user');
+            }
 
             //return successful response
             return response()->json(['error' => false, 'result' => $query], 200);
@@ -128,6 +166,8 @@ class TransactionController extends Controller
             $transaction->total_amount = $sport_activity->price;
             $transaction->order_date = $order_date;
             $transaction->expired_date = $expired_date;
+            //tambahin username di response transaction
+            $transaction->username = $user->name;
             $transaction->save();
 
             $items = new TransactionItem();
@@ -140,6 +180,11 @@ class TransactionController extends Controller
 
             // If everything is successful, commit the transaction
             DB::commit();
+
+            // fallback username (just in case)
+            if (empty($transaction->username)) {
+                $transaction->username = $user->name;
+            }
 
             //return successful response
             return response()->json(['error' => false, 'result' => $transaction, 'message' => 'Transaction Created'], 200);

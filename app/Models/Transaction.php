@@ -8,12 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     use HasFactory;
-      /**
+    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'transactions';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'username'
+    ];
 
 
     /**
@@ -31,5 +40,10 @@ class Transaction extends Model
     public function transaction_items_query()
     {
         return $this->hasOne(TransactionItem::class, 'transaction_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
