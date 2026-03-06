@@ -33,6 +33,7 @@ class TransactionController extends Controller
 
             $query = Transaction::with([
                 'transaction_items',
+                'user',
             ])->where('user_id', $user->id);
 
             if (!empty($search)) {
@@ -46,6 +47,16 @@ class TransactionController extends Controller
             } else {
                 $activities = $query->get();
             }
+
+            // fallback username: if null/empty, take from related user name
+            $activities->getCollection()->transform(function ($t) {
+                if (empty($t->username)) {
+                    $t->username = optional($t->user)->name;
+                }
+                unset($t->user);
+                return $t;
+            });
+
             //return successful response
             return response()->json(['error' => false, 'result' => $activities], 200);
         } catch (\Exception $e) {
@@ -62,6 +73,7 @@ class TransactionController extends Controller
 
             $query = Transaction::with([
                 'transaction_items',
+                'user',
             ]);
 
             if (!empty($search)) {
@@ -74,6 +86,24 @@ class TransactionController extends Controller
                 $activities = $query->paginate($request->per_page ?? 15);
             } else {
                 $activities = $query->get();
+            }
+
+            if (method_exists($activities, 'getCollection')) {
+                $activities->getCollection()->transform(function ($t) {
+                    if (empty($t->username)) {
+                        $t->username = optional($t->user)->name;
+                    }
+                    unset($t->user);
+                    return $t;
+                });
+            } else {
+                $activities->transform(function ($t) {
+                    if (empty($t->username)) {
+                        $t->username = optional($t->user)->name;
+                    }
+                    unset($t->user);
+                    return $t;
+                });
             }
 
             // Return successful response
@@ -90,6 +120,13 @@ class TransactionController extends Controller
             $query = Transaction::with(['transaction_items', 'user'])
                 ->where('id', $transactionId)
                 ->first();
+
+            if ($query && empty($query->username)) {
+                $query->username = optional($query->user)->name;
+            }
+            if ($query) {
+                $query->unsetRelation('user');
+            }
 
             //return successful response
             return response()->json(['error' => false, 'result' => $query], 200);
@@ -143,6 +180,11 @@ class TransactionController extends Controller
 
             // If everything is successful, commit the transaction
             DB::commit();
+
+            // fallback username (just in case)
+            if (empty($transaction->username)) {
+                $transaction->username = $user->name;
+            }
 
             //return successful response
             return response()->json(['error' => false, 'result' => $transaction, 'message' => 'Transaction Created'], 200);
