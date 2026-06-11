@@ -23,4 +23,6 @@ class SportCategory extends Model
      * @var string
      */
     protected $primaryKey = 'id';
+
+    protected $fillable = ['name', 'image_url'];
 }

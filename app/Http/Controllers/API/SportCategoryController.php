@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\SportCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class SportCategoryController extends Controller
@@ -40,11 +39,10 @@ class SportCategoryController extends Controller
             return response()->json(['error' => true, 'message' => $validator->errors()->first()], 406);
         }
 
-        $user = Auth::user();
-
         try {
             $category = new SportCategory();
             $category->name = $request->input('name');
+            $category->image_url = $request->input('image_url');
             $category->save();
 
             $category = SportCategory::where('id', $category->id)->first();
@@ -73,6 +71,9 @@ class SportCategoryController extends Controller
                 return response()->json(['error' => true, 'message' => 'Category not found'], 406);
             }
             $category->name = $request->input('name');
+            if ($request->has('image_url')) {
+                $category->image_url = $request->input('image_url');
+            }
 
             $category->save();
 
